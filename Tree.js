@@ -3,6 +3,7 @@ import Node from "./Node.js";
 export default class Tree {
   constructor(array) {
     this.array = array;
+    this.sortedArray = this.sortArray(this.removeDuplicates(this.array));
   }
 
   removeDuplicates(array = this.array) {
@@ -40,7 +41,16 @@ export default class Tree {
     return this.removeDuplicates(sortedArray);
   }
 
-  buildTree(array = this.array) {
-    
+  buildTree(array = this.sortedArray) {
+    if(array.length === 0) return null;
+
+    let midIndex = Math.floor((array.length - 1) / 2);
+    const root = new Node(array[midIndex]);
+    let leftArr = array.slice(0, midIndex);
+    let rightArr = array.slice(midIndex + 1, array.length);
+    root.left = this.buildTree(leftArr);
+    root.right = this.buildTree(rightArr);
+
+    return root;
   }
 }
