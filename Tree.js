@@ -81,10 +81,8 @@ export default class Tree {
     return this.root;
   }
 
-  deleteItem(value, node = this.root) {
-    if(value === node.data) {
-      // Make side with lowest height the new root
-    }
+  deleteItem(value) {
+    
   }
 
   find(value, node = this.root) {
@@ -114,5 +112,73 @@ export default class Tree {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  preOrder(callback, node = this.root) {
+    if(!callback) throw new Error("No callback function!");
+
+    try {
+      if(!node) return;
+      callback(node);
+      if(node.left) this.preOrder(callback, node.left);
+      if(node.right) this.preOrder(callback, node.right);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  inOrder(callback, node = this.root) {
+    if(!callback) throw new Error("No callback function!");
+
+    try {
+      if(!node) return;
+      if(node.left) this.inOrder(callback, node.left);
+      callback(node);
+      if(node.right) this.inOrder(callback, node.right);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  postOrder(callback, node = this.root) {
+    if(!callback) throw new Error("No callback function!");
+
+    try {
+      if(!node) return;
+      if(node.left) this.postOrder(callback, node.left);
+      if(node.right) this.postOrder(callback, node.right);
+      callback(node);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  height(value, node = this.root) {
+    if (!node) return "Value not found";
+
+    if (node.data === value) {
+      return this.calculateHeight(node);
+    }
+
+    if (value < node.data) return this.height(value, node.left);
+    if (value > node.data) return this.height(value, node.right);
+  }
+
+  calculateHeight(node) {
+    if (!node) return -1; // altura de nó nulo é -1 por convenção
+
+    const leftHeight = this.calculateHeight(node.left);
+    const rightHeight = this.calculateHeight(node.right);
+
+    return 1 + Math.max(leftHeight, rightHeight);
+  }
+
+  depth(value, node = this.root, depth = 0) {
+    if(value === node.data) return depth;
+
+    if((value < node.data) && (node.left !== null)) return this.depth(value, node.left, depth + 1);
+    if((value > node.data) && (node.right !== null)) return this.depth(value, node.right, depth + 1);
+
+    return "Value not found";
   }
 }
