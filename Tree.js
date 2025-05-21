@@ -4,6 +4,7 @@ export default class Tree {
   constructor(array) {
     this.array = array;
     this.sortedArray = this.sortArray(this.removeDuplicates(this.array));
+    this.root = this.buildTree();
   }
 
   removeDuplicates(array = this.array) {
@@ -52,5 +53,29 @@ export default class Tree {
     root.right = this.buildTree(rightArr);
 
     return root;
+  }
+
+  insert(value, node = this.root) {
+    
+    while(true) {
+      
+      if(value < node.data) {
+        if(node.left === null) {
+          node.left = new Node(value);
+          break;
+        }
+        node = node.left;
+      }
+
+      if(value > node.data) {
+        if(node.right === null) {
+          node.right = new Node(value);
+          break;
+        }
+        node = node.right;
+      }
+    }
+
+    return this.root;
   }
 }
