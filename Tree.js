@@ -181,4 +181,25 @@ export default class Tree {
 
     return "Value not found";
   }
+
+  isBalanced(node = this.root) {
+    let isBalanced = true;
+    this.preOrder((node) => {
+      if(!this.checkBalance(node)) {
+        isBalanced = false;
+        return;
+      }
+    });
+
+    return isBalanced;
+  }
+  
+  checkBalance(node = this.root) {
+    if (!node) return -1; // altura de nó nulo é -1 por convenção
+
+    const leftHeight = this.calculateHeight(node.left);
+    const rightHeight = this.calculateHeight(node.right);
+
+    return Math.abs(leftHeight - rightHeight) <= 1;
+  }
 }

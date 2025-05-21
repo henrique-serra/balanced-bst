@@ -18,7 +18,9 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
 };
 
 // prettyPrint(tree.buildTree());
-// tree.insert(6);
+tree.insert(6);
+tree.insert(72);
+// tree.insert(73);
 prettyPrint(tree.root);
 // console.log(tree.find(3));
 // tree.levelOrder((node) => console.log(node.data));
@@ -27,5 +29,6 @@ prettyPrint(tree.root);
 // tree.postOrder((node) => console.log(node.data));
 // console.log(tree.depth(24));
 // console.log(tree.height(8));
-tree.deleteItem(40);
-prettyPrint(tree.root);
+// tree.deleteItem(40);
+// prettyPrint(tree.root);
+console.log(tree.isBalanced());
