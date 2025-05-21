@@ -55,8 +55,10 @@ export default class Tree {
     return root;
   }
 
-  insert(value, node = this.root) {
-    
+  insert(value) {
+    let node = this.root;
+    if(value === node.data) return;
+
     while(true) {
       
       if(value < node.data) {
@@ -77,5 +79,40 @@ export default class Tree {
     }
 
     return this.root;
+  }
+
+  deleteItem(value, node = this.root) {
+    if(value === node.data) {
+      // Make side with lowest height the new root
+    }
+  }
+
+  find(value, node = this.root) {
+    if(value === node.data) return node;
+
+    if((value < node.data) && (node.left !== null)) return this.find(value, node.left);
+    if((value > node.data) && (node.right !== null)) return this.find(value, node.right);
+
+    return "Value not found";
+  }
+
+  levelOrder(callback, queue = [this.root]) {
+    if(!callback) throw new Error("No callback function!");
+    
+    try {
+      if(queue.length === 0) return;
+      let node = queue[0];
+      // Do callback with first item of queue
+      callback(node);
+      // Push node.left to queue
+      if(node.left) queue.push(node.left);
+      // Push node.right to queue
+      if(node.right) queue.push(node.right);
+      // Delete first item of queue
+      queue.shift();
+      this.levelOrder(callback, queue);
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
