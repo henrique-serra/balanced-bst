@@ -20,7 +20,7 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
 // prettyPrint(tree.buildTree());
 tree.insert(6);
 tree.insert(72);
-// tree.insert(73);
+tree.insert(73);
 prettyPrint(tree.root);
 // console.log(tree.find(3));
 // tree.levelOrder((node) => console.log(node.data));

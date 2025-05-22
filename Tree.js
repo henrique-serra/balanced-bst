@@ -183,23 +183,20 @@ export default class Tree {
   }
 
   isBalanced(node = this.root) {
-    let isBalanced = true;
-    this.preOrder((node) => {
-      if(!this.checkBalance(node)) {
-        isBalanced = false;
-        return;
-      }
-    });
+    const check = (node) => {
+      if (!node) return 0;
 
-    return isBalanced;
-  }
-  
-  checkBalance(node = this.root) {
-    if (!node) return -1; // altura de nó nulo é -1 por convenção
+      const leftHeight = check(node.left);
+      if (leftHeight === -1) return -1;
 
-    const leftHeight = this.calculateHeight(node.left);
-    const rightHeight = this.calculateHeight(node.right);
+      const rightHeight = check(node.right);
+      if (rightHeight === -1) return -1;
 
-    return Math.abs(leftHeight - rightHeight) <= 1;
+      if (Math.abs(leftHeight - rightHeight) > 1) return -1;
+
+      return 1 + Math.max(leftHeight, rightHeight);
+    };
+
+    return check(node) !== -1;
   }
 }
