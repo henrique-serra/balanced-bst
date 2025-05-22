@@ -199,4 +199,11 @@ export default class Tree {
 
     return check(node) !== -1;
   }
+
+  rebalance() {
+    this.sortedArray = [];
+    this.inOrder((node) => this.sortedArray.push(node.data));
+    this.root = this.buildTree();
+    return this.root;
+  }
 }
