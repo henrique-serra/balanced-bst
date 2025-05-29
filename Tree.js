@@ -126,6 +126,7 @@ export default class Tree {
 
   deleteItem(value, isBalanced = true) {
     let { node: nodeToDelete, parentNode, side } = isBalanced ? this.find(value) : this.findUnbalanced(value);
+    if(!nodeToDelete) return "Value not found";
     let children = this.getChildren(nodeToDelete);
 
     if(children.length === 0) parentNode[side] = null;
