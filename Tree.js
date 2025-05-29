@@ -7,6 +7,19 @@ export default class Tree {
     this.root = this.buildTree();
   }
 
+  prettyPrint(node = this.root, prefix = "", isLeft = true) {
+  if (node === null) {
+    return;
+  }
+  if (node.right !== null) {
+    this.prettyPrint(node.right, `${prefix}${isLeft ? "│   " : "    "}`, false);
+  }
+  console.log(`${prefix}${isLeft ? "└── " : "┌── "}${node.data}`);
+  if (node.left !== null) {
+    this.prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
+  }
+}
+
   removeDuplicates(array = this.array) {
     const arrayToSet = new Set(array);
 
@@ -81,15 +94,70 @@ export default class Tree {
     return this.root;
   }
 
-  deleteItem(value) {
-    
+  isLeaf(node) {
+    return (node.left === null) && (node.right === null);
   }
 
-  find(value, node = this.root) {
-    if(value === node.data) return node;
+  hasOneChild(node) {
+    return (
+      ((node.left !== null) && (node.right === null)) ||
+      ((node.left === null) && (node.right !== null))
+    )
+  }
 
-    if((value < node.data) && (node.left !== null)) return this.find(value, node.left);
-    if((value > node.data) && (node.right !== null)) return this.find(value, node.right);
+  hasTwoChildren(node) {
+    return ((node.left !== null) && (node.right !== null));
+  }
+
+  getChildren(node) {
+    let children = [];
+    if(node.left) children.push(node.left);
+    if(node.right) children.push(node.right);
+
+    return children;
+  }
+
+  findMin(node) {
+    let array = [];
+    this.inOrder((node) => array.push(node), node);
+
+    return array[0];
+  }
+
+  deleteItem(value, isBalanced = true) {
+    let { node: nodeToDelete, parentNode, side } = isBalanced ? this.find(value) : this.findUnbalanced(value);
+    let children = this.getChildren(nodeToDelete);
+
+    if(children.length === 0) parentNode[side] = null;
+    if(children.length === 1) parentNode[side] = children[0];
+    if(children.length === 2) {
+      const inOrderSuccessor = this.findMin(children[1]);
+      nodeToDelete.data = inOrderSuccessor.data;
+      inOrderSuccessor.data = value;
+      this.deleteItem(inOrderSuccessor.data, false);
+    }
+
+    return this.root;
+  }
+
+  find(value, node = this.root, parentNode = null, side = null) {
+    if(value === node.data) return { node, parentNode, side };
+
+    if((value < node.data) && (node.left !== null)) return this.find(value, node.left, node, 'left');
+    if((value > node.data) && (node.right !== null)) return this.find(value, node.right, node, 'right');
+
+    return "Value not found";
+  }
+
+  findUnbalanced(value, node = this.root, parentNode = null, side = null) {
+    if(!node) return "Value not found";
+    if(value === node.data) return { node, parentNode, side };
+
+    const leftResult = this.findUnbalanced(value, node.left, node, 'left');
+    if(leftResult !== "Value not found") return leftResult;
+
+    const rightResult = this.findUnbalanced(value, node.right, node, 'right');
+    if(rightResult !== "Value not found") return rightResult;
 
     return "Value not found";
   }
